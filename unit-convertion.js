@@ -648,17 +648,265 @@ function convertVolume() {
                 type: "input",
                 props: {
                     id: "gal-input",
-                    type: $kbType.decimal
+                    type: $kbType.decimal,
+                    text: "1.000"
                 },
                 layout: function (make, view) {
-
+                    make.left.top.inset(10);
+                    make.height.equalTo(32);
+                    make.width.equalTo(view.super)
+                        .multipliedBy(0.75)
+                        .offset(-15);
                 },
                 events: {
-
+                    changed: function (sender) {
+                        updateVolume(sender);
+                    }
+                }
+            },
+            {
+                type: "button",
+                props: {
+                    title: $l10n("gal")
+                },
+                layout: function (make, view) {
+                    make.right.top.inset(10);
+                    make.height.equalTo(32);
+                    make.left.equalTo(view.prev.right)
+                        .inset(10);
+                }
+            },
+            {
+                type: "input",
+                props: {
+                    id: "l-input",
+                    type: $kbType.decimal,
+                    text: "3.785"
+                },
+                layout: function (make, view) {
+                    make.left.inset(10);
+                    make.height.equalTo(32);
+                    make.top.equalTo(view.prev.bottom)
+                        .inset(10);
+                    make.width.equalTo(view.super)
+                        .multipliedBy(0.75)
+                        .offset(-15);
+                },
+                events: {
+                    changed: function (sender) {
+                        updateVolume(sender);
+                    }
+                }
+            },
+            {
+                type: "button",
+                props: {
+                    title: $l10n("l")
+                },
+                layout: function (make, view) {
+                    make.height.equalTo(32);
+                    make.right.inset(10);
+                    make.top.equalTo(view.prev);
+                    make.left.equalTo(view.prev.right)
+                        .inset(10);
+                }
+            },
+            // update above about layout format
+            {
+                type: "input",
+                props: {
+                    id: "qt-input",
+                    type: $kbType.decimal,
+                    text: "4.000"
+                },
+                layout: function (make, view) {
+                    make.top.equalTo(view.prev.bottom)
+                        .inset(10);
+                    make.left.inset(10);
+                    make.width.equalTo(view.super)
+                        .multipliedBy(0.75)
+                        .offset(-15);
+                    make.height.equalTo(32);
+                },
+                events: {
+                    changed: function (sender) {
+                        updateVolume(sender);
+                    }
+                }
+            },
+            {
+                type: "button",
+                props: {
+                    title: $l10n("qt")
+                },
+                layout: function (make, view) {
+                    make.top.equalTo(view.prev);
+                    make.left.equalTo(view.prev.right)
+                        .inset(10);
+                    make.right.inset(10);
+                    make.height.equalTo(32);
+                }
+            },
+            {
+                type: "input",
+                props: {
+                    id: "pt-input",
+                    type: $kbType.decimal,
+                    text: "8.000"
+                },
+                layout: function (make, view) {
+                    make.top.equalTo(view.prev.bottom)
+                        .inset(10);
+                    make.left.inset(10);
+                    make.width.equalTo(view.super)
+                        .multipliedBy(0.75)
+                        .offset(-15);
+                    make.height.equalTo(32);
+                },
+                events: {
+                    changed: function (sender) {
+                        updateVolume(sender);
+                    }
+                }
+            },
+            {
+                type: "button",
+                props: {
+                    title: $l10n("pt")
+                },
+                layout: function (make, view) {
+                    make.top.equalTo(view.prev);
+                    make.left.equalTo(view.prev.right)
+                        .inset(10);
+                    make.right.inset(10);
+                    make.height.equalTo(32);
+                }
+            },
+            {
+                type: "input",
+                props: {
+                    id: "cup-input",
+                    type: $kbType.decimal,
+                    text: "16.000"
+                },
+                layout: function (make, view) {
+                    make.top.equalTo(view.prev.bottom)
+                        .inset(10);
+                    make.left.inset(10);
+                    make.width.equalTo(view.super)
+                        .multipliedBy(0.75)
+                        .offset(-15);
+                    make.height.equalTo(32);
+                },
+                events: {
+                    changed: function (sender) {
+                        updateVolume(sender);
+                    }
+                }
+            },
+            {
+                type: "button",
+                props: {
+                    title: $l10n("cup")
+                },
+                layout: function (make, view) {
+                    make.top.equalTo(view.prev);
+                    make.left.equalTo(view.prev.right)
+                        .inset(10);
+                    make.right.inset(10);
+                    make.height.equalTo(32);
+                }
+            },
+            {
+                type: "input",
+                props: {
+                    id: "gi-input",
+                    type: $kbType.decimal,
+                    text: "32.000"
+                },
+                layout: function (make, view) {
+                    make.top.equalTo(view.prev.bottom)
+                        .inset(10);
+                    make.left.inset(10);
+                    make.width.equalTo(view.super)
+                        .multipliedBy(0.75)
+                        .offset(-15);
+                    make.height.equalTo(32);
+                },
+                events: {
+                    changed: function (sender) {
+                        updateVolume(sender);
+                    }
+                }
+            },
+            {
+                type: "button",
+                props: {
+                    title: $l10n("gi")
+                },
+                layout: function (make, view) {
+                    make.top.equalTo(view.prev);
+                    make.left.equalTo(view.prev.right)
+                        .inset(10);
+                    make.right.inset(10);
+                    make.height.equalTo(32);
                 }
             }
         ]
     });
+    // stupid function, to be updated next version
+    function updateVolume(sender) {
+        var galInput = $("gal-input");
+        var lInput = $("l-input");
+        var qtInput = $("qt-input");
+        var ptInput = $("pt-input");
+        var cupInput = $("cup-input");
+        var giInput = $("gi-input");
+        var numSender = parseFloat(sender.text);
+        switch (sender) {
+            case galInput:
+                lInput.text = (numSender * 3.785).toFixed(3);
+                qtInput.text = (numSender * 4).toFixed(3);
+                ptInput.text = (numSender * 8).toFixed(3);
+                cupInput.text = (numSender * 16).toFixed(3);
+                giInput.text = (numSender * 32).toFixed(3);
+                break;
+            case lInput:
+                galInput.text = (numSender / 3.875).toFixed(3);
+                qtInput.text = (numSender / 3.875 * 4).toFixed(3);
+                ptInput.text = (numSender / 3.875 * 8).toFixed(3);
+                cupInput.text = (numSender / 3.875 * 16).toFixed(3);
+                giInput.text = (numSender / 3.875 * 32).toFixed(3);
+                break;
+            case qtInput:
+                galInput.text = (numSender / 4).toFixed(3);
+                lInput.text = (numSender / 4 * 3.875).toFixed(3);
+                ptInput.text = (numSender / 4 * 8).toFixed(3);
+                cupInput.text = (numSender / 4 * 16).toFixed(3);
+                giInput.text = (numSender / 4 * 32).toFixed(3);
+                break;
+            case ptInput:
+                galInput.text = (numSender / 8).toFixed(3);
+                lInput.text = (numSender / 8 * 3.875).toFixed(3);
+                qtInput.text = (numSender / 8 * 4).toFixed(3);
+                cupInput.text = (numSender / 8 * 16).toFixed(3);
+                giInput.text = (numSender / 8 * 32).toFixed(3);
+                break;
+            case cupInput:
+                galInput.text = (numSender / 16).toFixed(3);
+                lInput.text = (numSender / 16 * 3.785).toFixed(3);
+                qtInput.text = (numSender / 16 * 4).toFixed(3);
+                ptInput.text = (numSender / 16 * 8).toFixed(3);
+                giInput.text = (numSender / 16 * 32).toFixed(3);
+                break;
+            default:
+                galInput.text = (numSender / 32).toFixed(3);
+                lInput.text = (numSender / 32 * 3.875).toFixed(3);
+                qtInput.text = (numSender / 32 * 4).toFixed(3);
+                ptInput.text = (numSender / 32 * 8).toFixed(3);
+                cupInput.text = (numSender / 32 * 16).toFixed(3);
+        }
+    }
 }
 
 //---------- render main ui ----------
@@ -688,7 +936,7 @@ $ui.render({
                         convertWeight();
                         break;
                     case $l10n("volume"):
-
+                        convertVolume();
                         break;
                     default:
                         console.log(data + ": invalid selected item")
