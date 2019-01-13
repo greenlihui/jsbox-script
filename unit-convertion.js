@@ -863,48 +863,43 @@ function convertVolume() {
         var cupInput = $("cup-input");
         var giInput = $("gi-input");
         var numSender = parseFloat(sender.text);
+        var numGal = 0;
         switch (sender) {
             case galInput:
-                lInput.text = (numSender * 3.785).toFixed(3);
-                qtInput.text = (numSender * 4).toFixed(3);
-                ptInput.text = (numSender * 8).toFixed(3);
-                cupInput.text = (numSender * 16).toFixed(3);
-                giInput.text = (numSender * 32).toFixed(3);
+                numGal = numSender;
                 break;
             case lInput:
-                galInput.text = (numSender / 3.875).toFixed(3);
-                qtInput.text = (numSender / 3.875 * 4).toFixed(3);
-                ptInput.text = (numSender / 3.875 * 8).toFixed(3);
-                cupInput.text = (numSender / 3.875 * 16).toFixed(3);
-                giInput.text = (numSender / 3.875 * 32).toFixed(3);
+                numGal = numSender / 3.875;
                 break;
             case qtInput:
-                galInput.text = (numSender / 4).toFixed(3);
-                lInput.text = (numSender / 4 * 3.875).toFixed(3);
-                ptInput.text = (numSender / 4 * 8).toFixed(3);
-                cupInput.text = (numSender / 4 * 16).toFixed(3);
-                giInput.text = (numSender / 4 * 32).toFixed(3);
+                numgal = numSender / 4;
                 break;
             case ptInput:
-                galInput.text = (numSender / 8).toFixed(3);
-                lInput.text = (numSender / 8 * 3.875).toFixed(3);
-                qtInput.text = (numSender / 8 * 4).toFixed(3);
-                cupInput.text = (numSender / 8 * 16).toFixed(3);
-                giInput.text = (numSender / 8 * 32).toFixed(3);
+                numGal = numSender / 8;
                 break;
             case cupInput:
-                galInput.text = (numSender / 16).toFixed(3);
-                lInput.text = (numSender / 16 * 3.785).toFixed(3);
-                qtInput.text = (numSender / 16 * 4).toFixed(3);
-                ptInput.text = (numSender / 16 * 8).toFixed(3);
-                giInput.text = (numSender / 16 * 32).toFixed(3);
+                numGal = numSender / 16;
                 break;
             default:
-                galInput.text = (numSender / 32).toFixed(3);
-                lInput.text = (numSender / 32 * 3.875).toFixed(3);
-                qtInput.text = (numSender / 32 * 4).toFixed(3);
-                ptInput.text = (numSender / 32 * 8).toFixed(3);
-                cupInput.text = (numSender / 32 * 16).toFixed(3);
+                numGal = numSender / 32;
+        }
+        if (sender != galInput) {
+            galInput.text = numGal.toFixed(3);
+        }
+        if (sender != lInput) {
+            lInput.text = (numGal * 3.875).toFixed(3);
+        }
+        if (sender != qtInput) {
+            qtInput.text = (numGal * 4).toFixed(3);
+        }
+        if (sender != ptInput) {
+            ptInput.text = (numGal * 8).toFixed(3);
+        }
+        if (sender != cupInput) {
+            cupInput.text = (numGal * 16).toFixed(3);
+        }
+        if (sender != giInput) {
+            giInput.text = (numGal * 32).toFixed(3);
         }
     }
 }
