@@ -6,10 +6,8 @@ $app.strings = {
         "length": "Length",
         "weight": "Weight",
         "volume": "Volume",
-        "from": "From",
-        "to": "To",
-        "celsius": "Celsius",
-        "fahrenheit": "Fahrenheit",
+        "celsius": "Celsius(˚C)",
+        "fahrenheit": "Fahrenheit(˚F)",
         "feet": "Feet",
         "inches": "Inches",
         "centimeters": "Centimeters",
@@ -31,10 +29,8 @@ $app.strings = {
         "length": "长度",
         "weight": "重量",
         "volume": "容积",
-        "from": "转",
-        "to": "为",
-        "celsius": "摄氏度",
-        "fahrenheit": "华氏度",
+        "celsius": "摄氏度(˚C)",
+        "fahrenheit": "华氏度(˚F)",
         "feet": "英尺",
         "inches": "英寸",
         "centimeters": "厘米",
@@ -56,8 +52,6 @@ $app.strings = {
         "length": "長度",
         "weight": "重量",
         "volume": "容積",
-        "from": "轉",
-        "to": "為",
         "celsius": "攝氏度",
         "fahrenheit": "華氏度",
         "feet": "英尺",
@@ -94,14 +88,20 @@ function convertExchangeRate() {
             handler: function (resp) {
                 $ui.loading(false);
                 usd2cny = resp.data.rates.CNY;
-                calculate();
+                $("cny-input").text = usd2cny.toFixed(4);
             }
         });
     }
     fetch(false);
-    function calculate() {
-        let val = parseFloat($("input-USD").text);
-        $("label-result").text = val * usd2cny + " CNY";
+    function updateExRate(sender) {
+        var usdInput = $("usd-input");
+        var cnyInput = $("cny-input");
+        var input = parseFloat(sender.text);
+        if (sender === usdInput) {
+            cnyInput.text = (input * usd2cny).toFixed(3);
+        } else {
+            usdInput.text = (input / usd2cny).toFixed(3);
+        }
     }
     $ui.push({
         props: {
@@ -111,45 +111,68 @@ function convertExchangeRate() {
             {
                 type: "input",
                 props: {
-                    id: "input-USD",
-                    text: "1",
-                    type: $kbType.decimal
+                    id: "usd-input",
+                    type: $kbType.decimal,
+                    text: "1"
                 },
-                layout: function (make, view) {
-                    make.left.top.inset(10);
-                    make.height.equalTo(32);
+                layout: function(make, view) {
+                    make.top.inset(10);
+                    make.left.inset(10);
                     make.width.equalTo(view.super)
-                        .multipliedBy(0.3);
+                        .multipliedBy(0.75)
+                        .offset(-15);
+                    make.height.equalTo(32);
                 },
                 events: {
-                    changed: function (sender) {
-                        calculate();
+                    changed: function(sender) {
+                        updateExRate(sender);
                     }
                 }
             },
             {
-                type: "label",
+                type: "button",
                 props: {
-                    id: "label-USD",
-                    text: "USD",
-                    font: $font(28)
+                    title: "USD"
                 },
-                layout: function (make, view) {
+                layout: function(make, view) {
                     make.top.inset(10);
-                    make.left.equalTo($("input-USD").right).inset(5);
+                    make.left.equalTo(view.prev.right)
+                        .inset(10);
+                    make.right.inset(10);
+                    make.height.equalTo(32);
                 }
             },
             {
-                type: "label",
+                type: "input",
                 props: {
-                    id: "label-result",
-                    text: usd2cny,
-                    font: $font(28),
-                    align: $align.center
+                    id: "cny-input",
+                    type: $kbType.decimal
                 },
-                layout: function (make, view) {
-                    make.right.top.inset(10);
-                    make.left.equalTo($("label-USD").right).inset(10);
+                layout: function(make, view) {
+                    make.top.equalTo(view.prev.bottom)
+                        .inset(10);
+                    make.left.inset(10);
+                    make.width.equalTo(view.super)
+                        .multipliedBy(0.75)
+                        .offset(-15);
+                    make.height.equalTo(32);
+                },
+                events: {
+                    changed: function(sender) {
+                        updateExRate(sender);
+                    }
+                }
+            },
+            {
+                type: "button",
+                props: {
+                    title: "CNY"
+                },
+                layout: function(make, view) {
+                    make.top.equalTo(view.prev);
+                    make.left.equalTo(view.prev.right)
+                        .inset(10);
+                    make.right.inset(10);
                     make.height.equalTo(32);
                 }
             }
@@ -159,164 +182,92 @@ function convertExchangeRate() {
 
 //---------- convert temperature ----------
 function convertTemperature() {
-    var fahrenheit2celsius = true;
-    var fahSym = "˚F";
-    var celSym = "˚C";
     $ui.push({
         props: {
             title: $l10n("temperature")
         },
         views: [
             {
-                type: "label",
+                type: "input",
                 props: {
-                    text: $l10n("from"),
-                    font: $font(28)
+                    id: "fah-input",
+                    type: $kbType.decimal,
+                    text: "86"
                 },
-                layout: function (make, view) {
-                    make.top.left.inset(10);
+                layout: function(make, view) {
+                    make.top.inset(10);
+                    make.left.inset(10);
+                    make.width.equalTo(view.super)
+                        .multipliedBy(0.7)
+                        .offset(-15);
+                    make.height.equalTo(32);
+                },
+                events: {
+                    changed: function(sender) {
+                        updateTemp(sender);
+                    }
                 }
             },
             {
                 type: "button",
                 props: {
-                    id: "button-from",
-                    title: " " + $l10n("fahrenheit") + " ",
-                    font: $font(28)
+                    title: $l10n("fahrenheit")
                 },
-                layout: function (make, view) {
-                    make.left.equalTo(view.prev.right);
+                layout: function(make, view) {
                     make.top.inset(10);
-                    make.height.equalTo(view.prev.height);
-                },
-                events: {
-                    tapped: function (sender) {
-                        switchUnit();
-                    }
-                }
-            },
-            {
-                type: "label",
-                props: {
-                    text: $l10n("to"),
-                    font: $font(28)
-                },
-                layout: function (make, view) {
-                    make.top.inset(10);
-                    make.left.equalTo(view.prev.right);
-                    make.height.equalTo(view.prev.height);
-                }
-            },
-            {
-                type: "button",
-                props: {
-                    id: "button-to",
-                    title: " " + $l10n("celsius") + " ",
-                    font: $font(28)
-                },
-                layout: function (make, view) {
-                    make.top.inset(10);
-                    make.height.equalTo(view.prev.height);
-                    make.left.equalTo(view.prev.right);
-                },
-                events: {
-                    tapped: function (sender) {
-                        switchUnit();
-                    }
+                    make.left.equalTo(view.prev.right)
+                        .inset(10);
+                    make.right.inset(10);
+                    make.height.equalTo(32);
                 }
             },
             {
                 type: "input",
                 props: {
-                    id: "input-temp",
+                    id: "cel-input",
                     type: $kbType.decimal,
-                    text: "80",
-                    font: $font(28),
-                    align: $align.right
+                    text: "30"
                 },
-                layout: function (make, view) {
+                layout: function(make, view) {
+                    make.top.equalTo(view.prev.bottom)
+                        .inset(10);
                     make.left.inset(10);
                     make.width.equalTo(view.super)
-                        .multipliedBy(0.2);
-                    make.top.equalTo($("button-from").bottom)
-                        .inset(10);
-                    make.height.equalTo($("button-from"));
+                        .multipliedBy(0.7)
+                        .offset(-15);
+                    make.height.equalTo(32);
                 },
                 events: {
-                    changed: function (sender) {
-                        updateTemp();
+                    changed: function(sender) {
+                        updateTemp(sender);
                     }
                 }
             },
             {
-                type: "label",
+                type: "button",
                 props: {
-                    id: "label1",
-                    text: fahSym,
-                    font: $font(36)
+                    title: $l10n("celsius")
                 },
-                layout: function (make, view) {
+                layout: function(make, view) {
+                    make.top.equalTo(view.prev);
                     make.left.equalTo(view.prev.right)
-                        .offset(10);
-                    make.top.equalTo($("button-from").bottom)
-                        .offset(10);
-                }
-            },
-            {
-                type: "label",
-                props: {
-                    id: "output-temp",
-                    font: $font(28),
-                    align: $align.right
-                },
-                layout: function (make, view) {
-                    make.left.inset(10);
-                    make.top.equalTo(view.prev.prev.bottom)
-                        .offset(10);
-                    make.width.equalTo(view.super)
-                        .multipliedBy(0.2);
-                    make.height.equalTo(view.prev.prev);
-                }
-            },
-            {
-                type: "label",
-                props: {
-                    id: "label2",
-                    text: celSym,
-                    font: $font(36)
-                },
-                layout: function (make, view) {
-                    make.left.equalTo(view.prev.right)
-                        .offset(10);
-                    make.top.equalTo(view.prev.prev.bottom)
-                        .offset(10);
+                        .inset(10);
+                    make.right.inset(10);
+                    make.height.equalTo(32);
                 }
             }
         ]
     });
-    function switchUnit() {
-        fahrenheit2celsius = !fahrenheit2celsius;
-        if (fahrenheit2celsius) {
-            $("button-from").title = " " + $l10n("fahrenheit") + " ";
-            $("button-to").title = " " + $l10n("celsius") + " ";
+    function updateTemp(sender) {
+        var fahInput = $("fah-input");
+        var celInput = $("cel-input");
+        var input = parseFloat(sender.text);
+        if (sender === fahInput) {
+            celInput.text = ((input - 32) / 1.8).toFixed(2);
         } else {
-            $("button-from").title = " " + $l10n("celsius") + " ";
-            $("button-to").title = " " + $l10n("fahrenheit") + " ";
+            fahInput.text = (input * 1.8 + 32).toFixed(2);
         }
-        $("label1").text = fahrenheit2celsius ? fahSym : celSym;
-        $("label2").text = fahrenheit2celsius ? celSym : fahSym;
-        updateTemp();
     }
-    function updateTemp() {
-        var input = parseFloat($("input-temp").text);
-        if (fahrenheit2celsius) {
-            var output = (input - 32) / 1.8;
-        } else {
-            var output = input * 1.8 + 32;
-        }
-        $("output-temp").text = output.toFixed(2);
-    }
-    updateTemp();
 }
 
 //---------- convert length ----------
