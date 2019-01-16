@@ -6,6 +6,7 @@ $app.strings = {
         "length": "Length",
         "weight": "Weight",
         "volume": "Volume",
+        "distance": "Distance",
         "celsius": "Celsius(˚C)",
         "fahrenheit": "Fahrenheit(˚F)",
         "feet": "Feet",
@@ -20,7 +21,10 @@ $app.strings = {
         "qt": "Quart",
         "pt": "Pint",
         "cup": "Cup",
-        "gi": "Gill"
+        "gi": "Gill",
+        "miles": "Miles",
+        "yards": "Yards",
+        "km": "Kiloeters"
     },
     "zh-Hans": {
         "main-title": "单位转换",
@@ -29,6 +33,7 @@ $app.strings = {
         "length": "长度",
         "weight": "重量",
         "volume": "容积",
+        "distance": "距离",
         "celsius": "摄氏度(˚C)",
         "fahrenheit": "华氏度(˚F)",
         "feet": "英尺",
@@ -43,7 +48,10 @@ $app.strings = {
         "qt": "夸脱",
         "pt": "品脱",
         "cup": "杯",
-        "gi": "吉尔"
+        "gi": "吉尔",
+        "miles": "公里",
+        "yards": "码",
+        "km": "千米"
     },
     "zh-Hant": {
         "main-title": "單位轉換",
@@ -52,6 +60,7 @@ $app.strings = {
         "length": "長度",
         "weight": "重量",
         "volume": "容積",
+        "distance": "距離",
         "celsius": "攝氏度",
         "fahrenheit": "華氏度",
         "feet": "英尺",
@@ -66,7 +75,10 @@ $app.strings = {
         "qt": "誇脫",
         "pt": "品脫",
         "cup": "杯",
-        "gi": "吉爾"
+        "gi": "吉爾",
+        "miles": "公里",
+        "yards": "碼",
+        "km": "千米"
     }
 }
 
@@ -75,18 +87,17 @@ var metrics = [
     $l10n("temperature"),
     $l10n("length"),
     $l10n("weight"),
-    $l10n("volume")
+    $l10n("volume"),
+    $l10n("distance")
 ];
 
 //---------- convert exchange rate ----------
 function convertExchangeRate() {
-    var usd2cny;
+    var usd2cny = 0;
     function fetch(pulled) {
-        $ui.loading(!pulled);
         $http.get({
             url: "https://api.exchangeratesapi.io/latest?base=USD",
             handler: function (resp) {
-                $ui.loading(false);
                 usd2cny = resp.data.rates.CNY;
                 $("cny-input").text = usd2cny.toFixed(4);
             }
@@ -115,7 +126,7 @@ function convertExchangeRate() {
                     type: $kbType.decimal,
                     text: "1"
                 },
-                layout: function(make, view) {
+                layout: function (make, view) {
                     make.top.inset(10);
                     make.left.inset(10);
                     make.width.equalTo(view.super)
@@ -124,7 +135,7 @@ function convertExchangeRate() {
                     make.height.equalTo(32);
                 },
                 events: {
-                    changed: function(sender) {
+                    changed: function (sender) {
                         updateExRate(sender);
                     }
                 }
@@ -134,7 +145,7 @@ function convertExchangeRate() {
                 props: {
                     title: "USD"
                 },
-                layout: function(make, view) {
+                layout: function (make, view) {
                     make.top.inset(10);
                     make.left.equalTo(view.prev.right)
                         .inset(10);
@@ -148,7 +159,7 @@ function convertExchangeRate() {
                     id: "cny-input",
                     type: $kbType.decimal
                 },
-                layout: function(make, view) {
+                layout: function (make, view) {
                     make.top.equalTo(view.prev.bottom)
                         .inset(10);
                     make.left.inset(10);
@@ -158,7 +169,7 @@ function convertExchangeRate() {
                     make.height.equalTo(32);
                 },
                 events: {
-                    changed: function(sender) {
+                    changed: function (sender) {
                         updateExRate(sender);
                     }
                 }
@@ -168,7 +179,7 @@ function convertExchangeRate() {
                 props: {
                     title: "CNY"
                 },
-                layout: function(make, view) {
+                layout: function (make, view) {
                     make.top.equalTo(view.prev);
                     make.left.equalTo(view.prev.right)
                         .inset(10);
@@ -194,7 +205,7 @@ function convertTemperature() {
                     type: $kbType.decimal,
                     text: "86"
                 },
-                layout: function(make, view) {
+                layout: function (make, view) {
                     make.top.inset(10);
                     make.left.inset(10);
                     make.width.equalTo(view.super)
@@ -203,7 +214,7 @@ function convertTemperature() {
                     make.height.equalTo(32);
                 },
                 events: {
-                    changed: function(sender) {
+                    changed: function (sender) {
                         updateTemp(sender);
                     }
                 }
@@ -213,7 +224,7 @@ function convertTemperature() {
                 props: {
                     title: $l10n("fahrenheit")
                 },
-                layout: function(make, view) {
+                layout: function (make, view) {
                     make.top.inset(10);
                     make.left.equalTo(view.prev.right)
                         .inset(10);
@@ -228,7 +239,7 @@ function convertTemperature() {
                     type: $kbType.decimal,
                     text: "30"
                 },
-                layout: function(make, view) {
+                layout: function (make, view) {
                     make.top.equalTo(view.prev.bottom)
                         .inset(10);
                     make.left.inset(10);
@@ -238,7 +249,7 @@ function convertTemperature() {
                     make.height.equalTo(32);
                 },
                 events: {
-                    changed: function(sender) {
+                    changed: function (sender) {
                         updateTemp(sender);
                     }
                 }
@@ -248,7 +259,7 @@ function convertTemperature() {
                 props: {
                     title: $l10n("celsius")
                 },
-                layout: function(make, view) {
+                layout: function (make, view) {
                     make.top.equalTo(view.prev);
                     make.left.equalTo(view.prev.right)
                         .inset(10);
@@ -588,7 +599,7 @@ function convertWeight() {
     }
 }
 
-//---------- convert volume
+//---------- convert volume ----------
 function convertVolume() {
     $ui.push({
         props: {
@@ -855,6 +866,96 @@ function convertVolume() {
     }
 }
 
+//---------- convert distance ----------
+function convertDistance() {
+    $ui.push({
+        props: {
+            title: $l10n("distance")
+        },
+        views: [
+            {
+                type: "input",
+                props: {
+                    id: "mile-input",
+                    type: $kbType.decimal,
+                    text: "1"
+                },
+                layout: function (make, view) {
+                    make.top.inset(10);
+                    make.left.inset(10);
+                    make.width.equalTo(view.super)
+                        .multipliedBy(0.75)
+                        .offset(-15);
+                    make.height.equalTo(32);
+                },
+                events: {
+                    changed: function(sender) {
+                        updateDistance(sender);
+                    }
+                }
+            },
+            {
+                type: "button",
+                props: {
+                    title: $l10n("miles")
+                },
+                layout: function(make, view) {
+                    make.top.inset(10);
+                    make.left.equalTo(view.prev.right)
+                        .inset(10);
+                    make.right.inset(10);
+                    make.height.equalTo(32);
+                }
+            },
+            {
+                type: "input",
+                props: {
+                    id: "km-input",
+                    type: $kbType.decimal,
+                    text: "1.609"
+                },
+                layout: function(make, view) {
+                    make.top.equalTo(view.prev.bottom)
+                        .inset(10);
+                    make.left.inset(10);
+                    make.width.equalTo(view.super)
+                        .multipliedBy(0.75)
+                        .offset(-15);
+                    make.height.equalTo(32);
+                },
+                events: {
+                    changed: function(sender) {
+                        updateDistance(sender);
+                    }
+                }
+            },
+            {
+                type: "button",
+                props: {
+                    title: $l10n("km")
+                },
+                layout: function(make, view) {
+                    make.top.equalTo(view.prev);
+                    make.left.equalTo(view.prev.right)
+                        .inset(10);
+                    make.right.inset(10);
+                    make.height.equalTo(32);
+                }
+            }
+        ]
+    });
+    function updateDistance(sender) {
+        var mileInput = $("mile-input");
+        var kmInput = $("km-input");
+        var input = parseFloat(sender.text);
+        if (sender === mileInput) {
+            kmInput.text = (input * 1.609).toFixed(3);
+        } else {
+            mileInput.text = (input / 1.609).toFixed(3);
+        }
+    }
+}
+
 //---------- render main ui ----------
 $ui.render({
     props: {
@@ -883,6 +984,9 @@ $ui.render({
                         break;
                     case $l10n("volume"):
                         convertVolume();
+                        break;
+                    case $l10n("distance"):
+                        convertDistance();
                         break;
                     default:
                         console.log(data + ": invalid selected item")
